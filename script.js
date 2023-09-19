@@ -118,7 +118,32 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+///////////////////////////SELECTION DU PAYS DANS LE SELECT/////////////////////////
 
+        // URL de l'API REST Countries pour obtenir la liste des pays
+        const apiUrl = "https://restcountries.com/v3.1/all";
+
+        // Effectuer une requête GET vers l'API
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                 // Trier les pays par ordre alphabétique
+                data.sort((a, b) => {
+                    const countryA = a.name.common.toLowerCase();
+                    const countryB = b.name.common.toLowerCase();
+                    return countryA.localeCompare(countryB);
+                });
+                // Parcourir les données et ajouter chaque pays à la liste déroulante
+                data.forEach(country => {
+                    const option = document.createElement("option");
+                    option.value = country.name.common.toLowerCase(); // Utiliser le nom en minuscules comme valeur
+                    option.textContent = country.name.common; // Afficher le nom du pays
+                    countrySelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération de la liste des pays :", error);
+            });
 
 /////////////////////////////REST COUNTRIES ////////////////////////////
 
@@ -169,29 +194,3 @@ countrySelect.addEventListener("change", () => {
 });
 
 
-///////////////////////////SELECTION DU PAYS DANS LE SELECT/////////////////////////
-
-        // URL de l'API REST Countries pour obtenir la liste des pays
-        const apiUrl = "https://restcountries.com/v3.1/all";
-
-        // Effectuer une requête GET vers l'API
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                 // Trier les pays par ordre alphabétique
-                data.sort((a, b) => {
-                    const countryA = a.name.common.toLowerCase();
-                    const countryB = b.name.common.toLowerCase();
-                    return countryA.localeCompare(countryB);
-                });
-                // Parcourir les données et ajouter chaque pays à la liste déroulante
-                data.forEach(country => {
-                    const option = document.createElement("option");
-                    option.value = country.name.common.toLowerCase(); // Utiliser le nom en minuscules comme valeur
-                    option.textContent = country.name.common; // Afficher le nom du pays
-                    countrySelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error("Erreur lors de la récupération de la liste des pays :", error);
-            });
